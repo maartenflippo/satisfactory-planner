@@ -1,0 +1,40 @@
+type CreateItemId<Id extends string> = `item_${Id}`;
+
+/**
+ * All the ids for items supported by this application.
+ */
+export type ItemId = CreateItemId<"iron_ore">
+    | CreateItemId<"coal_ore">
+    | CreateItemId<"iron_plate">
+    | CreateItemId<"iron_ingot">;
+
+export type Item = {
+    /**
+     * The human-friendly name of the item.
+     */
+    name: string,
+
+    /**
+     * The url to an image of the item.
+     */
+    image_url: string,
+};
+
+function item(name: string, image_name: string = ""): Item {
+    const image_url = image_name === "" ? "" : `/images/items/${image_name}_64.png`;
+
+    return {
+        name,
+        image_url
+    };
+}
+
+/**
+ * The items that can be used in recipes.
+ */
+export const items: Record<ItemId, Item> = {
+    item_iron_ore: item("Iron Ore", "iron-ore"),
+    item_coal_ore: item("Coal Ore", "coal"),
+    item_iron_ingot: item("Iron Ingot", "iron-ingot"),
+    item_iron_plate: item("Iron Plate", "iron-plate"),
+};
