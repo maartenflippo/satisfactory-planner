@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import InputNumber from "primevue/inputnumber";
+// import InputNumber from "primevue/inputnumber";
+import { computed } from "vue";
 import { type RecipeInstance, compute_power_consumption, compute_power_production } from "../core/production_line";
 import { type RecipeComponent, ItemRecipeComponent } from "../core/recipes";
 import { items } from "../core/items";
 
-const { value: recipes } = defineModel<RecipeInstance[]>();
+const model = defineModel<RecipeInstance[]>();
+
+const is_empty = computed(() => model.value?.length === 0);
 
 function get_items(components: RecipeComponent[]): ItemRecipeComponent[] {
     return components.filter(component => component.type === "item") as ItemRecipeComponent[];
@@ -15,29 +18,34 @@ function get_items(components: RecipeComponent[]): ItemRecipeComponent[] {
     <table class="w-full" style="border-collapse: collapse;">
         <thead>
             <tr>
-                <th class="border-1 border-200 p-4">Machine</th>
-                <th class="border-1 border-200 p-3">Clock Speed</th>
-                <th class="border-1 border-200 p-3">Machine Count</th>
+                <th class="border-1 border-200 p-3" rowspan="2">Count</th>
+                <th class="border-1 border-200 p-4" rowspan="2">Machine</th>
+                <th class="border-1 border-200 p-3" colspan="2">Items</th>
+                <th class="border-1 border-200 p-3" colspan="2">Power</th>
+            </tr>
+
+            <tr>
                 <th class="border-1 border-200 p-3">Inputs</th>
                 <th class="border-1 border-200 p-3">Outputs</th>
-                <th class="border-1 border-200 p-3">Power Consumption</th>
-                <th class="border-1 border-200 p-3">Power Production</th>
+                <th class="border-1 border-200 p-3">Consumption</th>
+                <th class="border-1 border-200 p-3">Production</th>
             </tr>
         </thead>
 
         <tbody>
-            <tr v-for="recipe in recipes">
+            <tr v-for="(recipe, idx) in model" :key="idx">
+                <td class="border-1 border-200 p-3">
+                    <input v-model="recipe.machine_count"
+                        class="block w-4rem p-2 border-round border-1 border-300 hover:border-primary focus:border-primary outline-none focus:outline-primary text-center text-color text-base"
+                        type="number" min="1" />
+                </td>
+
                 <td class="border-1 border-200 p-3 flex flex-column align-items-center">
-                    <img :src="recipe.machine.image_url" alt="Icon of the machine" />
+                    <!-- <img :src="recipe.machine.image_url" alt="Icon of the machine" /> -->
                     <p>{{ recipe.machine.name }}</p>
-                </td>
-
-                <td class="border-1 border-200 p-3">
-                    <InputNumber v-model="recipe.clock_speed" suffix="%" :maxFractionDigits="4" class="w-full" />
-                </td>
-
-                <td class="border-1 border-200 p-3">
-                    <InputNumber v-model="recipe.machine_count" class="w-full" />
+                    <input v-model="recipe.clock_speed"
+                        class="block w-5rem p-2 border-round border-1 border-300 hover:border-primary focus:border-primary outline-none focus:outline-primary text-center text-color text-base"
+                        type="number" min="0" max="250" />
                 </td>
 
                 <td class="border-1 border-200 p-3">
@@ -63,7 +71,7 @@ function get_items(components: RecipeComponent[]): ItemRecipeComponent[] {
                 </td>
             </tr>
 
-            <tr v-if="recipes?.length === 0">
+            <tr v-if="is_empty">
                 <td class="border-1 border-200 p-3" colspan="7">
                     <p class="text-center">Add a first recipe</p>
                 </td>
@@ -71,3 +79,12 @@ function get_items(components: RecipeComponent[]): ItemRecipeComponent[] {
         </tbody>
     </table>
 </template>
+
+<style scoped>
+.focus:outline-primary:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #a7f3d0;
+    border-color: #10b981;
+}
+</style>

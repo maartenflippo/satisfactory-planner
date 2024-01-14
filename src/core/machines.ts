@@ -1,5 +1,8 @@
-export type MachineId = "miner_mk1"
-    | "smelter";
+type CreateMachineId<Id extends string> = `machine_${Id}`
+
+export type MachineId = CreateMachineId<"miner_mk1">
+    | CreateMachineId<"smelter">
+    | CreateMachineId<"constructor">;
 
 export type Machine = {
     /**
@@ -33,6 +36,7 @@ function machine(name: string, base_power_consumption: number, base_power_produc
  * The machines available to build the production lines.
  */
 export const machines: Record<MachineId, Machine> = {
-    "miner_mk1": machine("Miner Mk.1", 5, 0, "miner-mk-1"),
-    "smelter": machine("Smelter", 4, 0, "smelter"),
+    "machine_miner_mk1": machine("Miner Mk.1", 5, 0, "miner-mk-1"),
+    "machine_smelter": machine("Smelter", 4, 0, "smelter"),
+    "machine_constructor": machine("Constructor", 4, 0, "constructor"),
 };

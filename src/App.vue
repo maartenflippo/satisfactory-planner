@@ -1,49 +1,59 @@
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
+import { computed, ref, type ComputedRef } from "vue";
 import { type MenuItem } from "primevue/menuitem";
-import PanelMenu from "primevue/panelmenu";
+import TabMenu, { TabMenuChangeEvent } from "primevue/tabmenu";
 
 import CreateProductionLine from "./components/CreateProductionLine.vue";
 import ProductionLineView from "./components/ProductionLine.vue";
 
-import { type ProductionLine, use_production_lines_store, persist_state } from "./core/production_line.ts";
+import { type ProductionLine, use_production_lines_store, persist_production_lines } from "./core/production_line.ts";
 
 const store = use_production_lines_store();
-store.$subscribe(persist_state);
+store.$subscribe((_, state) => persist_production_lines(state.production_lines));
 
-const selected_production_line: Ref<ProductionLine | null> = ref(null);
+const menu_items: ComputedRef<MenuItem[]> = computed(() => {
+    return store.production_lines.map(line => {
+        return {
+            label: line.name,
+            key: line.slug,
+        };
+    });
+});
+
+const compute_selected_tab_index = () => {
+    const active_slug = get_slug_from_location();
+    for (let idx = 0; idx < store.production_lines.length; idx++) {
+        const production_line = store.production_lines[idx];
+
+        if (production_line.slug === active_slug) {
+            return idx;
+        }
+    }
+
+    return 0;
+};
+
+const selected_tab_index = ref(compute_selected_tab_index());
+
+const selected_production_line: ComputedRef<ProductionLine | null> = computed(() => store.production_lines[selected_tab_index.value]);
 
 window.addEventListener('popstate', on_location_change);
 
 on_location_change();
 
 function on_location_change() {
-    const { hash } = document.location;
-
-    if (!hash.startsWith('#/')) {
-        window.history.pushState({}, "", "/");
-        selected_production_line.value = null;
-
-        return;
-    }
-
-    const slug = hash.substring(2);
-    load_production_line(slug);
+    selected_tab_index.value = compute_selected_tab_index();
 }
 
-function get_route(menu_item: MenuItem): string {
-    return `/#/${menu_item.slug}`;
-}
-
-function load_production_line(slug: string) {
-    const production_line = store.production_lines.find(line => line.slug === slug);
-
-    if (production_line) {
-        selected_production_line.value = production_line;
-    } else {
-        console.error(`Failed to load production line with slug '${slug}'.`);
-    }
-}
+// function load_production_line(slug: string) {
+//     const production_line = store.production_lines.find(line => line.slug === slug);
+// 
+//     if (production_line) {
+//         selected_production_line.value = production_line;
+//     } else {
+//         console.error(`Failed to load production line with slug '${slug}'.`);
+//     }
+// }
 
 function on_new_production_line(name: string, success: () => void, failure: () => void) {
     const production_line = store.create_production_line(name);
@@ -54,26 +64,36 @@ function on_new_production_line(name: string, success: () => void, failure: () =
         failure();
     }
 }
+
+function on_tab_change(event: TabMenuChangeEvent) {
+    const menu_item = menu_items.value[event.index];
+    window.history.pushState({}, "", `#/${menu_item.key}`);
+}
+
+function get_slug_from_location(): string {
+    const { hash } = document.location;
+
+    if (!hash.startsWith('#/')) {
+        return "";
+    }
+
+    return hash.substring(2);
+}
 </script>
 
 <template>
-    <div class="flex flex-row">
-        <aside class="px-3">
-            <h2>Production Lines</h2>
-
+    <div class="flex flex-column h-full">
+        <div>
             <CreateProductionLine @on-new="on_new_production_line" />
+        </div>
 
-            <PanelMenu :model="store.production_lines" class="w-full md:w-20rem">
-                <template #item="{ item }">
-                    <a class="flex align-items-center cursor-pointer text-color px-3 py-2" :href="get_route(item)">
-                        <span class="ml-2 text-color">{{ item.name }}</span>
-                    </a>
-                </template>
-            </PanelMenu>
-        </aside>
+        <nav class="px-3">
+            <TabMenu :model="menu_items" class="" v-model:activeIndex="selected_tab_index" />
+        </nav>
 
         <main class="flex-grow-1 px-3">
-            <ProductionLineView v-if="selected_production_line" :production_line="selected_production_line" />
+            <ProductionLineView v-if="selected_production_line" :production_line="selected_production_line"
+                class="h-full" />
         </main>
     </div>
 </template>

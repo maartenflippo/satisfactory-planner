@@ -1,32 +1,49 @@
 <script setup lang="ts">
-import { type Ref, ref } from "vue";
+import { computed } from "vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Divider from "primevue/divider";
+
 import AddRecipe from "./AddRecipe.vue";
 import RecipeList from "./RecipeList.vue";
-import { type ProductionLine, type RecipeInstance } from "../core/production_line";
+import { type ProductionLine, type RecipeInstance, Summary } from "../core/production_line";
 
-const { production_line } = defineProps<{ production_line: ProductionLine }>();
+const props = defineProps<{ production_line: ProductionLine }>();
 
-const added_recipes: Ref<RecipeInstance[]> = ref(production_line.recipes);
+const items_overview = computed(() => {
+    const overview = props.production_line
+        .recipes
+        .reduce((acc, recipe) => {
+            acc.extend(recipe);
+            return acc;
+        }, new Summary());
+
+    return overview.items;
+});
 
 function add_recipe(instance: RecipeInstance) {
-    added_recipes.value.push(instance);
+    props.production_line.recipes.push(instance);
 }
 </script>
 
 <template>
-    <div v-if="production_line" class="w-full">
-        <h2>Production Line: {{ production_line.name }}</h2>
+    <div v-if="production_line" class="w-full flex">
+        <div class="w-6 px-3">
+            <h3>Recipes</h3>
 
-        <div class="w-full flex flex-row gap-5">
-            <div class="flex-grow-1">
-                <h3>Recipes</h3>
+            <AddRecipe @add-recipe="add_recipe" class="mb-5" />
+            <RecipeList v-model="production_line.recipes" />
+        </div>
+        <Divider layout="vertical" />
+        <div class="w-6 px-3">
+            <h3>Overview</h3>
 
-                <AddRecipe @add-recipe="add_recipe" class="mb-5" />
-                <RecipeList v-model="added_recipes" />
-            </div>
-            <div class="flex-grow-1">
-                <h3>Overview</h3>
-            </div>
+            <DataTable :value="items_overview">
+                <Column field="name" header="Item" />
+                <Column field="gross_production" header="Production" />
+                <Column field="consumption" header="Consumption" />
+                <Column field="net_production" header="Net Production" />
+            </DataTable>
         </div>
     </div>
 </template>

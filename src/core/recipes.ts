@@ -70,29 +70,62 @@ function MinerRecipe(machine_id: MachineId, produces: ItemId, rate: number): Rec
     };
 }
 
+function ConstructorRecipe(name: string, input: ItemRecipeComponent, output: ItemRecipeComponent): Recipe {
+    const power_input: PowerRecipeComponent = {
+        type: "power",
+        amount: 4,
+    };
+
+    return {
+        name,
+        inputs: [power_input, input],
+        outputs: [output],
+        get machine() {
+            return machines["machine_constructor"];
+        }
+    };
+}
+
+function SmelterRecipe(name: string, input: ItemRecipeComponent, output: ItemRecipeComponent): Recipe {
+    const power_input: PowerRecipeComponent = {
+        type: "power",
+        amount: 4,
+    };
+
+    return {
+        name,
+        inputs: [power_input, input],
+        outputs: [output],
+        get machine() {
+            return machines["machine_smelter"];
+        }
+    };
+}
+
 type CreateRecipeId<Id extends string> = `recipe_${Id}`
 
 export type RecipeId = CreateRecipeId<"iron_ore">
-    | CreateRecipeId<"coal_ore">;
+    | CreateRecipeId<"coal_ore">
+    | CreateRecipeId<"iron_ingot">
+    | CreateRecipeId<"iron_plate">;
 
 /**
  * The available recipes in the game.
  */
 export const recipes: Record<RecipeId, Recipe> = {
-    "recipe_iron_ore": MinerRecipe("miner_mk1", "item_iron_ore", 60),
-    "recipe_coal_ore": MinerRecipe("miner_mk1", "item_coal_ore", 60),
+    "recipe_iron_ore": MinerRecipe("machine_miner_mk1", "item_iron_ore", 60),
+    "recipe_coal_ore": MinerRecipe("machine_miner_mk1", "item_coal_ore", 60),
 
-    // {
-    //     name: "Iron Plates",
+    "recipe_iron_ingot": SmelterRecipe(
+        "Iron Ingot",
+        { type: "item", item: "item_iron_ore", rate: 30 },
+        { type: "item", item: "item_iron_ingot", rate: 30 }
+    ),
 
-    //     inputs: [
-    //         { type: "item", item: "iron_ingot", amount: 30 },
-    //         { type: "power", amount: 4 },
-    //     ],
-
-    //     outputs: [
-    //         { type: "item", item: "iron_plate", amount: 20 },
-    //     ],
-    // }
+    "recipe_iron_plate": ConstructorRecipe(
+        "Iron Plates",
+        { type: "item", item: "item_iron_ingot", rate: 30 },
+        { type: "item", item: "item_iron_plate", rate: 20 }
+    ),
 };
 

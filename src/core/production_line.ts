@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import { Recipe } from "./recipes";
+import { ItemRecipeComponent, Recipe } from "./recipes";
+import { ItemId, items } from "./items";
 
 export type RecipeInstance = Recipe & {
     /**
@@ -13,6 +14,64 @@ export type RecipeInstance = Recipe & {
     machine_count: number,
 };
 
+export class Summary {
+    private _items: Map<ItemId, ItemSummary> = new Map();
+
+    private get_or_create_summary(item: ItemId): ItemSummary {
+        if (!this._items.has(item)) {
+            this._items.set(item, new ItemSummary(items[item].name, 0, 0));
+        }
+
+        // TODO: Remove this cast. It should be possible to tell the TypeScript
+        // compiler that `this._items` contains the key `item` at this point.
+        return this._items.get(item) as ItemSummary;
+    }
+
+    /**
+     * Extend the current summary with another recipe.
+     *
+     * @param recipe The recipe to include in the summary.
+     */
+    extend(recipe: RecipeInstance) {
+        recipe.outputs
+            .filter((output): output is ItemRecipeComponent => output.type === "item")
+            .forEach(output => {
+                const item_summary = this.get_or_create_summary(output.item);
+                item_summary.gross_production += output.rate * recipe.machine_count;
+            });
+
+        recipe.inputs
+            .filter((input): input is ItemRecipeComponent => input.type === "item")
+            .forEach(input => {
+                const item_summary = this.get_or_create_summary(input.item);
+                item_summary.consumption += input.rate * recipe.machine_count;
+            });
+    }
+
+    get items(): ItemSummary[] {
+        return Array.from(this._items.values());
+    }
+}
+
+export class ItemSummary {
+    constructor(
+        public name: string,
+        public gross_production: number,
+        public consumption: number
+    ) { }
+
+    extend(other: ItemSummary) {
+        console.assert(this.name === other.name, "Merging two item summaries with different item names.");
+
+        this.gross_production += other.gross_production;
+        this.consumption += other.consumption;
+    }
+
+    get net_production(): number {
+        return this.gross_production - this.consumption;
+    }
+}
+
 export const compute_power_production = (recipe_instance: RecipeInstance): number => {
     // TODO: Account for clock speed.
     return recipe_instance.machine.base_power_production * recipe_instance.machine_count;
@@ -22,6 +81,22 @@ export const compute_power_consumption = (recipe_instance: RecipeInstance): numb
     // TODO: Account for clock speed.
     return recipe_instance.machine.base_power_consumption * recipe_instance.machine_count;
 };
+
+export const compute_production = (recipe_instance: RecipeInstance, item: ItemId): number => {
+    return recipe_instance
+        .outputs
+        .filter((output): output is ItemRecipeComponent => output.type === "item")
+        .filter(output => output.item === item)
+        .reduce((acc, output) => acc + output.rate * recipe_instance.machine_count, 0);
+}
+
+export const compute_consumption = (recipe_instance: RecipeInstance, item: ItemId): number => {
+    return recipe_instance
+        .outputs
+        .filter((input): input is ItemRecipeComponent => input.type === "item")
+        .filter(input => input.item === item)
+        .reduce((acc, input) => acc + input.rate * recipe_instance.machine_count, 0);
+}
 
 /**
  * The data associated with a production line.
@@ -79,10 +154,9 @@ export const use_production_lines_store = defineStore('production_lines', {
     }
 });
 
-import { MutationType } from 'pinia'
-export const persist_state = (_: MutationType, state: { production_lines: ProductionLine[] }) => {
+export const persist_production_lines = (production_lines: ProductionLine[]) => {
     window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(state.production_lines),
+        JSON.stringify(production_lines),
     );
 };
