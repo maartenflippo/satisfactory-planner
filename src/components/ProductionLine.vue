@@ -50,14 +50,14 @@ function format_power(value: number): string {
 
 <template>
     <div v-if="production_line" class="w-full flex">
-        <div class="w-6 px-3">
+        <div class="w-7 px-3">
             <h3>Recipes</h3>
 
             <AddRecipe @add-recipe="add_recipe" class="mb-5" />
             <RecipeList v-model="production_line.recipes" class="bg-white" />
         </div>
         <Divider layout="vertical" />
-        <div class="w-6 px-3">
+        <div class="w-5 px-3">
             <h3>Overview</h3>
 
             <Fieldset legend="Items">
