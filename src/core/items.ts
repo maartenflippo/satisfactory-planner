@@ -38,6 +38,47 @@ export type ItemId = CreateItemId<"iron_ore">
     | CreateItemId<"wood">
     | CreateItemId<"biomass">
     | CreateItemId<"aluminum_casing">
+    | CreateItemId<"ai_limiter">
+    | CreateItemId<"alclad_aluminum_sheet">
+    | CreateItemId<"adaptive_control_unit">
+    | CreateItemId<"supercomputer">
+    | CreateItemId<"assembly_director_system">
+    | CreateItemId<"stator">
+    | CreateItemId<"modular_frame">
+    | CreateItemId<"rotor">
+    | CreateItemId<"motor">
+    | CreateItemId<"automated_wiring">
+    | CreateItemId<"black_powder">
+    | CreateItemId<"smokeless_powder">
+    | CreateItemId<"circuit_board">
+    | CreateItemId<"nobelisk">
+    | CreateItemId<"cluster_nobelisk">
+    | CreateItemId<"gas_nobelisk">
+    | CreateItemId<"pulse_nobelisk">
+    | CreateItemId<"compacted_coal">
+    | CreateItemId<"crystal_oscillator">
+    | CreateItemId<"computer">
+    | CreateItemId<"electromagnetic_control_rod">
+    | CreateItemId<"petroleum_coke">
+    | CreateItemId<"high_speed_connector">
+    | CreateItemId<"encased_industrial_beam">
+    | CreateItemId<"mycelia">
+    | CreateItemId<"fabric">
+    | CreateItemId<"heat_sink">
+    | CreateItemId<"rifle_ammo">
+    | CreateItemId<"homing_rifle_ammo">
+    | CreateItemId<"radio_control_unit">
+    | CreateItemId<"cooling_system">
+    | CreateItemId<"pressure_conversion_cube">
+    | CreateItemId<"plutonium_pellet">
+    | CreateItemId<"encased_plutonium_cell">
+    | CreateItemId<"plutonium_fuel_rod">
+    | CreateItemId<"fused_modular_frame">
+    | CreateItemId<"iron_rebar">
+    | CreateItemId<"shatter_rebar">
+    | CreateItemId<"stun_rebar">
+    | CreateItemId<"smart_plating">
+    | CreateItemId<"versatile_framework">
 
     | CreateItemId<"reinforced_iron_plate">
     ;
@@ -97,11 +138,19 @@ export const items: Record<ItemId, Item> = {
     item_iron_plate: item("Iron Plate", "iron-plate", 2),
     item_iron_rod: item("Iron Rod", "iron-rod", 2),
     item_screw: item("Screw", "screw", 3),
+    item_reinforced_iron_plate: item("Reinforced Iron Plate", "reinforced-iron-plate", 4),
+    item_rotor: item("Rotor", "rotor", 4),
+    item_modular_frame: item("Modular Frame", "modular-frame", 4),
+    item_stator: item("Stator", "stator", 4),
+    item_motor: item("Motor", "motor", 5),
 
     item_silica: item("Silica", "silica", 1),
     item_quartz_crystal: item("Quartz Crystal", "quartz-crystal", 1),
+    item_crystal_oscillator: item("Crystal Oscillator", "crystal-oscillator", 5),
 
+    item_mycelia: item("Mycelia", "mycelia"),
     item_biomass: item("Biomass", "biomass", 1),
+    item_fabric: item("Fabric", "fabric", 2),
 
     item_plastic: item("Plastic", "plastic", 1),
     item_rubber: item("Rubber", "rubber", 1),
@@ -109,17 +158,58 @@ export const items: Record<ItemId, Item> = {
     item_concrete: item("Concrete", "concrete", 1),
 
     item_quickwire: item("Quickwire", "quickwire", 2),
+    item_ai_limiter: item("AI Limiter", "ai-limiter", 3),
+
+    item_circuit_board: item("Circuit Board", "circuit-board", 4),
+    item_high_speed_connector: item("High-speed Connector", "high-speed-connector", 5),
+    item_computer: item("Computer", "computer", 6),
+    item_supercomputer: item("Supercomputer", "supercomputer", 7),
+
+    item_radio_control_unit: item("Radio Control Unit", "radio-control-unit", 7),
+    item_heat_sink: item("Heat Sink", "heat-sink", 7),
+    item_cooling_system: item("Cooling System", "cooling-system", 7),
+    item_electromagnetic_control_rod: item("Electromagnetic Control Rod", "electromagnetic-control-rod", 7),
+
+    item_plutonium_pellet: item("Plutonium Pellet", "plutonium-pellet", 3),
+    item_plutonium_fuel_rod: item("Plutonium Fuel Rod", "plutonium-fuel-rod", 4),
+    item_encased_plutonium_cell: item("Encased Plutonium Cell", "plutonium-cell", 5),
 
     item_steel_ingot: item("Steel Ingot", "steel-ingot", 1),
     item_steel_beam: item("Steel Beam", "steel-beam", 2),
     item_steel_pipe: item("Steel Pipe", "steel-pipe", 2),
+    item_encased_industrial_beam: item("Encased Industrial Beam", "encased-industrial-beam", 3),
 
     item_empty_canister: item("Empty Canister", "empty-canister", 2),
     item_empty_fluid_tank: item("Empty Fluid Tank", "empty-fluid-tank", 2),
 
-    item_reinforced_iron_plate: item("Reinforced Iron Plate", "reinforced-iron-plate", 4),
-
     item_aluminum_scrap: item("Aluminum Scrap", "aluminum-scrap", 4),
     item_aluminum_ingot: item("Aluminum Ingot", "aluminum-ingot", 5),
     item_aluminum_casing: item("Aluminum Casing", "aluminum-casing", 6),
+    item_alclad_aluminum_sheet: item("Alclad Aluminum Sheet", "alclad-aluminum-sheet", 6),
+
+    item_fused_modular_frame: item("Fused Modular Frame", "fused-modular-frame", 7),
+    item_pressure_conversion_cube: item("Pressure Conversion Cube", "pressure-conversion-cube", 7),
+
+    item_iron_rebar: item("Iron Rebar", "iron-rebar", 3),
+    item_shatter_rebar: item("Shatter Rebar", "shatter-rebar", 4),
+    item_stun_rebar: item("Stun Rebar", "stun-rebar", 4),
+
+    item_black_powder: item("Black Powder", "black-powder", 1),
+    item_smokeless_powder: item("Smokeless Powder", "smokeless-powder", 2),
+    item_rifle_ammo: item("Rifle Ammo", "rifle-ammo", 3),
+    item_homing_rifle_ammo: item("Homing Rifle Ammo", "homing-rifle-ammo", 4),
+
+    item_nobelisk: item("Nobelisk", "nobelisk", 3),
+    item_gas_nobelisk: item("Gas Nobelisk", "gas-nobelisk", 4),
+    item_pulse_nobelisk: item("Pulse Nobelisk", "pulse-nobelisk", 4),
+    item_cluster_nobelisk: item("Cluster Nobelisk", "cluster-nobelisk", 4),
+
+    item_smart_plating: item("Smart Plating", "smart-plating", 7),
+    item_versatile_framework: item("Versatile Framework", "versatile-framework", 7),
+    item_adaptive_control_unit: item("Adaptive Control Unit", "adaptive-control-unit", 7),
+    item_automated_wiring: item("Automated Wiring", "automated-wiring", 7),
+    item_assembly_director_system: item("Assembly Director System", "assembly-director-system", 7),
+
+    item_compacted_coal: item("Compacted Coal", "compacted-coal", 2),
+    item_petroleum_coke: item("Petroleum Coke", "petroleum-coke", 3),
 };
