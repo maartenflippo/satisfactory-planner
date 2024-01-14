@@ -5,8 +5,12 @@ type CreateItemId<Id extends string> = `item_${Id}`;
  */
 export type ItemId = CreateItemId<"iron_ore">
     | CreateItemId<"coal_ore">
+    | CreateItemId<"iron_ingot">
     | CreateItemId<"iron_plate">
-    | CreateItemId<"iron_ingot">;
+    | CreateItemId<"iron_rod">
+    | CreateItemId<"screw">
+    | CreateItemId<"reinforced_iron_plate">
+    ;
 
 export type Item = {
     /**
@@ -37,4 +41,7 @@ export const items: Record<ItemId, Item> = {
     item_coal_ore: item("Coal Ore", "coal"),
     item_iron_ingot: item("Iron Ingot", "iron-ingot"),
     item_iron_plate: item("Iron Plate", "iron-plate"),
+    item_iron_rod: item("Iron Rod", "iron-rod"),
+    item_screw: item("Screw", "screw"),
+    item_reinforced_iron_plate: item("Reinforced Iron Plate", "reinforced-iron-plate"),
 };

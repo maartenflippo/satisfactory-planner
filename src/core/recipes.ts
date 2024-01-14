@@ -102,30 +102,74 @@ function SmelterRecipe(name: string, input: ItemRecipeComponent, output: ItemRec
     };
 }
 
+function AssemblerRecipe(name: string, inputs: [ItemRecipeComponent, ItemRecipeComponent], output: ItemRecipeComponent): Recipe {
+    const power_input: PowerRecipeComponent = {
+        type: "power",
+        amount: 15,
+    };
+
+    return {
+        name,
+        inputs: [power_input, ...inputs],
+        outputs: [output],
+        get machine() {
+            return machines["machine_assembler"];
+        }
+    };
+}
+
 type CreateRecipeId<Id extends string> = `recipe_${Id}`
 
-export type RecipeId = CreateRecipeId<"iron_ore">
+export type RecipeId =
+    /* CreateRecipeId<"iron_ore">
     | CreateRecipeId<"coal_ore">
-    | CreateRecipeId<"iron_ingot">
-    | CreateRecipeId<"iron_plate">;
+    |*/
+    CreateRecipeId<"iron_ingot">
+    | CreateRecipeId<"iron_plate">
+    | CreateRecipeId<"iron_rod">
+    | CreateRecipeId<"screw">
+    | CreateRecipeId<"reinforced_iron_plate">
+    ;
+
+function ItemComponent(item: ItemId, rate: number): ItemRecipeComponent {
+    return { type: "item", item, rate };
+}
 
 /**
  * The available recipes in the game.
  */
 export const recipes: Record<RecipeId, Recipe> = {
-    "recipe_iron_ore": MinerRecipe("machine_miner_mk1", "item_iron_ore", 60),
-    "recipe_coal_ore": MinerRecipe("machine_miner_mk1", "item_coal_ore", 60),
+    // "recipe_iron_ore": MinerRecipe("machine_miner_mk1", "item_iron_ore", 60),
+    // "recipe_coal_ore": MinerRecipe("machine_miner_mk1", "item_coal_ore", 60),
 
-    "recipe_iron_ingot": SmelterRecipe(
+    recipe_iron_ingot: SmelterRecipe(
         "Iron Ingot",
-        { type: "item", item: "item_iron_ore", rate: 30 },
-        { type: "item", item: "item_iron_ingot", rate: 30 }
+        ItemComponent("item_iron_ore", 30),
+        ItemComponent("item_iron_ingot", 30),
     ),
 
-    "recipe_iron_plate": ConstructorRecipe(
+    recipe_iron_plate: ConstructorRecipe(
         "Iron Plates",
-        { type: "item", item: "item_iron_ingot", rate: 30 },
-        { type: "item", item: "item_iron_plate", rate: 20 }
+        ItemComponent("item_iron_ingot", 30),
+        ItemComponent("item_iron_plate", 20),
+    ),
+
+    recipe_iron_rod: ConstructorRecipe(
+        "Iron Rods",
+        ItemComponent("item_iron_ingot", 15),
+        ItemComponent("item_iron_rod", 15),
+    ),
+
+    recipe_screw: ConstructorRecipe(
+        "Screws",
+        ItemComponent("item_iron_rod", 10),
+        ItemComponent("item_screw", 40),
+    ),
+
+    recipe_reinforced_iron_plate: AssemblerRecipe(
+        "Reinforced Iron Plates",
+        [ItemComponent("item_iron_plate", 30), ItemComponent("item_screw", 60)],
+        ItemComponent("item_reinforced_iron_plate", 5),
     ),
 };
 

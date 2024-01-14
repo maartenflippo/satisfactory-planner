@@ -59,13 +59,13 @@ function remove_recipe(recipe_idx: number) {
 
                 <td class="border-1 border-200 p-3">
                     <p v-for="recipe_component in get_items(recipe.inputs)">
-                        {{ items[recipe_component.item].name }}
+                        {{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)
                     </p>
                 </td>
 
                 <td class="border-1 border-200 p-3">
                     <p v-for="recipe_component in get_items(recipe.outputs)">
-                        {{ items[recipe_component.item].name }}
+                        {{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)
                     </p>
                 </td>
 
