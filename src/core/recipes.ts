@@ -1,5 +1,5 @@
 import { type ItemId } from "./items";
-import { type MachineId, type Machine, machines } from "./machines";
+import { type Machine, machines } from "./machines";
 
 export type ItemRecipeComponent = {
     type: "item",
@@ -52,23 +52,23 @@ export type Recipe = {
     get outputs(): RecipeComponent[],
 };
 
-function MinerRecipe(machine_id: MachineId, produces: ItemId, rate: number): Recipe {
-    return {
-        name: `${machines[machine_id].name}: ${produces}`,
-
-        get machine() {
-            return machines[machine_id];
-        },
-
-        inputs: [
-            { type: "power", amount: machines[machine_id].base_power_production },
-        ],
-
-        outputs: [
-            { type: "item", item: produces, rate },
-        ]
-    };
-}
+// function MinerRecipe(machine_id: MachineId, produces: ItemId, rate: number): Recipe {
+//     return {
+//         name: `${machines[machine_id].name}: ${produces}`,
+// 
+//         get machine() {
+//             return machines[machine_id];
+//         },
+// 
+//         inputs: [
+//             { type: "power", amount: machines[machine_id].base_power_production },
+//         ],
+// 
+//         outputs: [
+//             { type: "item", item: produces, rate },
+//         ]
+//     };
+// }
 
 function ConstructorRecipe(name: string, input: ItemRecipeComponent, output: ItemRecipeComponent): Recipe {
     const power_input: PowerRecipeComponent = {
