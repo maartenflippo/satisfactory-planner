@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ItemRecipeComponent, Recipe } from "./recipes";
-import { ItemId, items } from "./items";
+import { Item, ItemId, items } from "./items";
 
 export type RecipeInstance = Recipe & {
     /**
@@ -19,7 +19,7 @@ export class Summary {
 
     private get_or_create_summary(item: ItemId): ItemSummary {
         if (!this._items.has(item)) {
-            this._items.set(item, new ItemSummary(items[item].name, 0, 0));
+            this._items.set(item, new ItemSummary(items[item], 0, 0));
         }
 
         // TODO: Remove this cast. It should be possible to tell the TypeScript
@@ -49,22 +49,27 @@ export class Summary {
     }
 
     get items(): ItemSummary[] {
-        return Array.from(this._items.values());
+        return Array.from(this._items.values())
+            .sort((a, b) => a.item.topographic_order - b.item.topographic_order);
     }
 }
 
 export class ItemSummary {
     constructor(
-        public name: string,
+        public item: Item,
         public gross_production: number,
         public consumption: number
     ) { }
 
     extend(other: ItemSummary) {
-        console.assert(this.name === other.name, "Merging two item summaries with different item names.");
+        console.assert(this.item === other.item, "Merging two item summaries with different item.");
 
         this.gross_production += other.gross_production;
         this.consumption += other.consumption;
+    }
+
+    get item_name(): string {
+        return this.item.name;
     }
 
     get net_production(): number {

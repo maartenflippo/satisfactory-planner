@@ -39,7 +39,7 @@ function add_recipe(instance: RecipeInstance) {
             <h3>Overview</h3>
 
             <DataTable :value="items_overview">
-                <Column field="name" header="Item" />
+                <Column field="item_name" header="Item" />
                 <Column field="gross_production" header="Production" />
                 <Column field="consumption" header="Consumption" />
                 <Column field="net_production" header="Net Production" />
