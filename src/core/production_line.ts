@@ -73,13 +73,16 @@ export class ItemSummary {
 }
 
 export const compute_power_production = (recipe_instance: RecipeInstance): number => {
-    // TODO: Account for clock speed.
-    return recipe_instance.machine.base_power_production * recipe_instance.machine_count;
+    // Power production scales linearly with the clock speed.
+    const base_power_production = recipe_instance.machine.base_power_production * recipe_instance.clock_speed / 100;
+
+    return base_power_production * recipe_instance.machine_count;
 };
 
 export const compute_power_consumption = (recipe_instance: RecipeInstance): number => {
-    // TODO: Account for clock speed.
-    return recipe_instance.machine.base_power_consumption * recipe_instance.machine_count;
+    const base_power_consumption = recipe_instance.machine.base_power_consumption * Math.pow((recipe_instance.clock_speed / 100), 1.321928);
+
+    return base_power_consumption * recipe_instance.machine_count;
 };
 
 export const compute_production = (recipe_instance: RecipeInstance, item: ItemId): number => {
