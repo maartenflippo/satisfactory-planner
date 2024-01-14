@@ -30,13 +30,19 @@ function add_selected_recipe() {
 
     recipe_to_add.value = null;
 }
+
+function submit(e: Event) {
+    e.preventDefault();
+
+    add_selected_recipe();
+}
 </script>
 
 <template>
-    <div class="flex w-full">
+    <form @submit="submit" class="flex w-full">
         <!-- Add Recipe -->
-        <Dropdown v-model="recipe_to_add" :options="available_recipes" optionLabel="name" filter placeholder="Add a recipe"
-            class="flex-grow-1">
+        <Dropdown v-model="recipe_to_add" :options="available_recipes" optionLabel="name" editable
+            placeholder="Add a recipe" class="flex-grow-1">
             <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                     <img alt="Image of the {{ slotProps.value.name }} recipe"
@@ -58,7 +64,7 @@ function add_selected_recipe() {
             </template>
         </Dropdown>
 
-        <Button label="Add" @click="add_selected_recipe" class="ml-5" />
-    </div>
+        <Button type="submit" label="Add" class="ml-5" />
+    </form>
 </template>
 
