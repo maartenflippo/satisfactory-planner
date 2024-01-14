@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import InputNumber from "primevue/inputnumber";
 import { computed } from "vue";
 import Button from "primevue/button";
 import { type RecipeInstance, compute_power_consumption, compute_power_production } from "../core/production_line";
