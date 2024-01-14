@@ -159,6 +159,19 @@ export const use_production_lines_store = defineStore('production_lines', {
 
             return production_line;
         },
+
+        /**
+         * Remove the production line with the given slug. 
+         *
+         * If no production line exists with this slug, this is a no-op.
+         */
+        remove_production_line(slug: string) {
+            let index = this.production_lines.findIndex(line => line.slug === slug);
+
+            if (index >= 0) {
+                this.production_lines.splice(index, 1);
+            }
+        },
     }
 });
 

@@ -3,7 +3,7 @@ import { computed, ref, type ComputedRef } from "vue";
 import { type MenuItem } from "primevue/menuitem";
 import TabMenu, { TabMenuChangeEvent } from "primevue/tabmenu";
 
-import CreateProductionLine from "./components/CreateProductionLine.vue";
+import TopNav from "./components/TopNav.vue";
 import ProductionLineView from "./components/ProductionLine.vue";
 
 import { type ProductionLine, use_production_lines_store, persist_production_lines } from "./core/production_line.ts";
@@ -45,20 +45,11 @@ function on_location_change() {
     selected_tab_index.value = compute_selected_tab_index();
 }
 
-// function load_production_line(slug: string) {
-//     const production_line = store.production_lines.find(line => line.slug === slug);
-// 
-//     if (production_line) {
-//         selected_production_line.value = production_line;
-//     } else {
-//         console.error(`Failed to load production line with slug '${slug}'.`);
-//     }
-// }
-
 function on_new_production_line(name: string, success: () => void, failure: () => void) {
     const production_line = store.create_production_line(name);
     if (production_line) {
         window.history.pushState({}, "", `#/${production_line.slug}`);
+        on_location_change();
         success();
     } else {
         failure();
@@ -79,21 +70,29 @@ function get_slug_from_location(): string {
 
     return hash.substring(2);
 }
+
+function on_delete_production_line() {
+    store.remove_production_line(selected_production_line.value?.slug ?? "");
+}
 </script>
 
 <template>
     <div class="flex flex-column h-full">
-        <div>
-            <CreateProductionLine @on-new="on_new_production_line" />
-        </div>
+        <TopNav @on-new="on_new_production_line" @on-delete="on_delete_production_line"
+            :show-delete="!!selected_production_line" />
 
         <nav class="px-3">
-            <TabMenu :model="menu_items" class="" v-model:activeIndex="selected_tab_index" />
+            <TabMenu :model="menu_items" @tab-change="on_tab_change" v-model:activeIndex="selected_tab_index" />
         </nav>
 
         <main class="flex-grow-1 px-3">
             <ProductionLineView v-if="selected_production_line" :production_line="selected_production_line"
                 class="h-full" />
+
+            <p v-if="!selected_production_line"
+                class="w-full h-full flex align-items-center justify-content-center text-4xl">
+                Create a new production line to get started.
+            </p>
         </main>
     </div>
 </template>

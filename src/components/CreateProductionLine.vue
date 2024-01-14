@@ -37,7 +37,7 @@ function submit(e: Event) {
 </script>
 
 <template>
-    <Button label="New" @click="open_modal" />
+    <Button label="New Production Line" icon="pi pi-plus" @click="open_modal" />
     <Dialog v-model:visible="visible" modal header="Create new production line">
         <form @submit="submit" class="flex flex-column gap-2">
             <label for="production_line_name">Name</label>
