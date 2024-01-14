@@ -95,7 +95,7 @@ function SmelterRecipe(name: string, input: ItemRecipeComponent, output: ItemRec
 function ConstructorRecipe(name: string, input: ItemRecipeComponent, output: ItemRecipeComponent, alternate: boolean = false): Recipe {
     const power_input: PowerRecipeComponent = {
         type: "power",
-        amount: 4,
+        amount: machines["machine_constructor"].base_power_consumption,
     };
 
     return {
@@ -113,7 +113,7 @@ function ConstructorRecipe(name: string, input: ItemRecipeComponent, output: Ite
 function AssemblerRecipe(name: string, inputs: [ItemRecipeComponent, ItemRecipeComponent], output: ItemRecipeComponent, alternate: boolean = false): Recipe {
     const power_input: PowerRecipeComponent = {
         type: "power",
-        amount: 15,
+        amount: machines["machine_assembler"].base_power_consumption,
     };
 
     return {
