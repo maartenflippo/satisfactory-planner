@@ -1,6 +1,29 @@
 # Satisfactory Planner
 
-My own take on a planning tool for satisfactory.
+My own take on a planning tool for satisfactory. This is a more hands-on tool than
+[Satisfactory Calculator](https://satisfactory-calculator.com) or
+[SatisfactoryTools](https://satisfactorytools.com). These tools automatically 
+construct a production line. This tool does **not** have this capability. By giving
+the planner full control of the planning, you can be sure no numbers change
+beyond the field currently being edited.
+
+## Features
+
+- [ ] All Recipes
+  - [*] Smelter Recipes
+  - [ ] Foundry Recipes
+  - [*] Constructor Recipes
+  - [*] Assembler Recipes
+  - [ ] Manufacterer Recipes
+  - [ ] Blender Recipes
+  - [ ] Packager Recipes
+  - [ ] Generators
+- [ ] Resource nodes & extraction: Add recipes for Miners, Oil extractors, etc. This
+system is not a simple extra recipe, due to the purity levels of the resource nodes.
+- [ ] Re-order recipes: The ability to re-order the recipes in the recipe list should
+improve the overview of the production line.
+- [ ] Grouping recipes: Improve the overview by grouping different recipes together.
+- [ ] Graph View: Spacially plan out the production line.
 
 ## License
 
