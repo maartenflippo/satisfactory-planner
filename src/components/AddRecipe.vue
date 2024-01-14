@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type Ref, ref } from "vue";
 import Button from "primevue/button";
-import Dropdown from "primevue/dropdown";
+import AutoComplete, { type AutoCompleteCompleteEvent } from "primevue/autocomplete";
 import { type Recipe, recipes } from "../core/recipes";
 import { type RecipeInstance } from "../core/production_line";
 
@@ -10,8 +10,7 @@ const emit = defineEmits<{
 }>()
 
 const recipe_to_add: Ref<Recipe | null> = ref(null);
-
-const available_recipes: Recipe[] = Object.values(recipes);
+const suggested_recipes: Ref<Recipe[]> = ref(query(""));
 
 function add_selected_recipe() {
     const new_recipe = recipe_to_add.value;
@@ -33,36 +32,31 @@ function add_selected_recipe() {
 
 function submit(e: Event) {
     e.preventDefault();
-
     add_selected_recipe();
+}
+
+function query(filter: string) {
+    return Object.values(recipes)
+        .filter(recipe => recipe.name.toLowerCase().includes(filter.toLowerCase()));
+}
+
+function search(e: AutoCompleteCompleteEvent) {
+    suggested_recipes.value = query(e.query);
 }
 </script>
 
 <template>
     <form @submit="submit" class="flex w-full">
         <!-- Add Recipe -->
-        <Dropdown v-model="recipe_to_add" :options="available_recipes" optionLabel="name" editable
-            placeholder="Add a recipe" class="flex-grow-1">
-            <template #value="slotProps">
-                <div v-if="slotProps.value" class="flex align-items-center">
-                    <img alt="Image of the {{ slotProps.value.name }} recipe"
-                        src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" class="mr-2"
-                        style="width: 18px" />
-                    <span>{{ slotProps.value.name }}</span>
-                </div>
-                <span v-else>
-                    {{ slotProps.placeholder }}
-                </span>
-            </template>
+
+        <AutoComplete v-model="recipe_to_add" optionLabel="name" :suggestions="suggested_recipes" @complete="search"
+            placeholder="Add a Recipe" force-selection dropdown class="flex-grow-1">
             <template #option="slotProps">
-                <div class="flex align-items-center">
-                    <img alt="Image of the {{ slotProps.option.name }} recipe"
-                        src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" class="mr-2"
-                        style="width: 18px" />
-                    <span>{{ slotProps.option.name }}</span>
+                <div class="flex align-options-center">
+                    <div>{{ slotProps.option.name }}</div>
                 </div>
             </template>
-        </Dropdown>
+        </AutoComplete>
 
         <Button type="submit" label="Add" class="ml-5" />
     </form>
