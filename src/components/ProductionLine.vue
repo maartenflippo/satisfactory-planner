@@ -7,7 +7,7 @@ import Fieldset from "primevue/fieldset";
 
 import AddRecipe from "./AddRecipe.vue";
 import RecipeList from "./RecipeList.vue";
-import { type ProductionLine, type RecipeInstance, Summary } from "../core/production_line";
+import { type ProductionLine, type RecipeInstance, Summary, compute_power_production, compute_power_consumption } from "../core/production_line";
 
 const props = defineProps<{ production_line: ProductionLine }>();
 
@@ -22,8 +22,29 @@ const items_overview = computed(() => {
     return overview.items;
 });
 
+const total_power_production = computed(() => {
+    const value = props.production_line.recipes
+        .map(recipe => compute_power_production(recipe))
+        .reduce((acc, item) => acc + item, 0);
+
+    return format_power(value);
+});
+
+const total_power_consumption = computed(() => {
+    const value = props.production_line.recipes
+        .map(recipe => compute_power_consumption(recipe))
+        .reduce((acc, item) => acc + item, 0);
+
+    return format_power(value);
+});
+
 function add_recipe(instance: RecipeInstance) {
     props.production_line.recipes.push(instance);
+}
+
+function format_power(value: number): string {
+    const formatted = parseFloat(value.toFixed(4));
+    return `${formatted} MW`;
 }
 </script>
 
@@ -53,17 +74,10 @@ function add_recipe(instance: RecipeInstance) {
             </Fieldset>
 
             <Fieldset legend="Power" class="mt-3 text-base">
-                <table>
-                    <tr>
-                        <td class="p-2">Production</td>
-                        <td class="p-2">0 MW</td>
-                    </tr>
-
-                    <tr>
-                        <td class="p-2">Consumption</td>
-                        <td class="p-2">0 MW</td>
-                    </tr>
-                </table>
+                <DataTable :value="[{ total_power_production, total_power_consumption }]">
+                    <Column field="total_power_production" header="Production" />
+                    <Column field="total_power_consumption" header="Consumption" />
+                </DataTable>
             </Fieldset>
         </div>
     </div>
