@@ -60,8 +60,6 @@ function format_power(value: number): string {
         <div class="w-5 px-3">
             <h3>Overview</h3>
 
-            <!-- <Fieldset legend="Items"
-                :pt="{ toggleableContent: { style: 'margin: 0 calc(-1 * var(--content-padding) / 2 - 2px)' }, content: { class: 'p-0' } }"> -->
             <Fieldset legend="Items"
                 :pt="{ root: { class: 'p-0' }, legend: { class: 'ml-3' }, content: { class: 'p-0 pt-3' } }">
                 <DataTable :value="items_overview">

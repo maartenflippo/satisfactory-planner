@@ -37,7 +37,7 @@ function remove_recipe(recipe_idx: number) {
         </thead>
 
         <tbody>
-            <tr v-for="(recipe, idx) in model" :key="idx">
+            <tr v-for="(recipe, idx) in    model   " :key="idx">
                 <td class="border-1 border-200 p-3">
                     <div class="flex flex-column align-items-center">
                         <input v-model="recipe.machine_count"
@@ -58,14 +58,18 @@ function remove_recipe(recipe_idx: number) {
                 </td>
 
                 <td class="border-1 border-200 p-3">
-                    <p v-for="recipe_component in get_items(recipe.inputs)">
-                        {{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)
+                    <p v-for="recipe_component in get_items(recipe.inputs)" class="flex align-items-center gap-3">
+                        <img :src="items[recipe_component.item].image_url"
+                            :alt="`${items[recipe_component.item].name} icon`" width="32" height="32" />
+                        <span>{{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)</span>
                     </p>
                 </td>
 
                 <td class="border-1 border-200 p-3">
-                    <p v-for="recipe_component in get_items(recipe.outputs)">
-                        {{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)
+                    <p v-for="recipe_component in get_items(recipe.outputs)" class="flex align-items-center gap-3">
+                        <img :src="items[recipe_component.item].image_url"
+                            :alt="`${items[recipe_component.item].name} icon`" width="32" height="32" />
+                        <span>{{ items[recipe_component.item].name }} ({{ recipe_component.rate }} p/m)</span>
                     </p>
                 </td>
 
