@@ -4,6 +4,7 @@ export type MachineId = CreateMachineId<"miner_mk1">
     | CreateMachineId<"smelter">
     | CreateMachineId<"constructor">
     | CreateMachineId<"assembler">
+    | CreateMachineId<"manufacturer">
     ;
 
 export type Machine = {
@@ -42,4 +43,5 @@ export const machines: Record<MachineId, Machine> = {
     machine_smelter: machine("Smelter", 4, 0, "smelter"),
     machine_constructor: machine("Constructor", 4, 0, "constructor"),
     machine_assembler: machine("Assembler", 15, 0, "assembler"),
+    machine_manufacturer: machine("Manufacturer", 55, 0, "manufacturer"),
 };

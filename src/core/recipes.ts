@@ -127,6 +127,23 @@ function AssemblerRecipe(name: string, inputs: [ItemRecipeComponent, ItemRecipeC
     };
 }
 
+function ManufacturerRecipe(name: string, inputs: ItemRecipeComponent[], output: ItemRecipeComponent, alternate: boolean = false): Recipe {
+    const power_input: PowerRecipeComponent = {
+        type: "power",
+        amount: machines["machine_manufacturer"].base_power_consumption,
+    };
+
+    return {
+        name,
+        alternate,
+        inputs: [power_input, ...inputs],
+        outputs: [output],
+        get machine() {
+            return machines["machine_assembler"];
+        }
+    };
+}
+
 function ItemComponent(item: ItemId, rate: number): ItemRecipeComponent {
     return { type: "item", item, rate };
 }
@@ -690,6 +707,251 @@ export const recipes: Record<string, Recipe> = {
         "Versatile Framework",
         [ItemComponent("item_modular_frame", 2.5), ItemComponent("item_steel_beam", 30)],
         ItemComponent("item_versatile_framework", 5),
+    ),
+
+    recipe_adaptive_control_unit: ManufacturerRecipe(
+        "Adaptive Control Unit",
+        [ItemComponent("item_automated_wiring", 7.5), ItemComponent("item_circuit_board", 5), ItemComponent("item_heavy_modular_frame", 1), ItemComponent("item_computer", 1)], ItemComponent("item_adaptive_control_unit", 1)
+    ),
+
+    recipe_automated_miner: ManufacturerRecipe(
+        "Automated Miner",
+        [ItemComponent("item_motor", 1), ItemComponent("item_steel_pipe", 4), ItemComponent("item_iron_rod", 4), ItemComponent("item_iron_plate", 2)],
+        ItemComponent("item_portable_miner", 1),
+        true,
+    ),
+
+    recipe_automated_speed_wiring: ManufacturerRecipe(
+        "Automated Speed Wiring",
+        [ItemComponent("item_stator", 3.75), ItemComponent("item_wire", 75), ItemComponent("item_high_speed_connector", 1.875)],
+        ItemComponent("item_automated_wiring", 7.5),
+        true,
+    ),
+
+    recipe_beacon: ManufacturerRecipe(
+        "Beacon",
+        [ItemComponent("item_iron_plate", 22.5), ItemComponent("item_iron_rod", 7.5), ItemComponent("item_wire", 112.5), ItemComponent("item_cable", 15)],
+        ItemComponent("item_beacon", 7.5),
+    ),
+
+    recipe_caterium_computer: ManufacturerRecipe(
+        "Caterium Computer",
+        [ItemComponent("item_circuit_board", 26.25), ItemComponent("item_quickwire", 105), ItemComponent("item_rubber", 45)],
+        ItemComponent("item_computer", 3.8),
+        true,
+    ),
+
+    recipe_classic_battery: ManufacturerRecipe(
+        "Classic Battery",
+        [ItemComponent("item_sulfur", 45), ItemComponent("item_alclad_aluminum_sheet", 52.5), ItemComponent("item_plastic", 60), ItemComponent("item_wire", 90)],
+        ItemComponent("item_battery", 30),
+        true,
+    ),
+
+    recipe_computer: ManufacturerRecipe(
+        "Computer",
+        [ItemComponent("item_circuit_board", 25), ItemComponent("item_cable", 22.5), ItemComponent("item_plastic", 45), ItemComponent("item_screw", 130)],
+        ItemComponent("item_computer", 2.5),
+    ),
+
+    recipe_crystal_beacon: ManufacturerRecipe(
+        "Crystal Beacon",
+        [ItemComponent("item_steel_beam", 2), ItemComponent("item_steel_pipe", 8), ItemComponent("item_crystal_oscillator", 0.5)],
+        ItemComponent("item_beacon", 10),
+        true,
+    ),
+
+    recipe_crystal_oscillator: ManufacturerRecipe(
+        "Crystal Oscillator",
+        [ItemComponent("item_quartz_crystal", 18), ItemComponent("item_cable", 14), ItemComponent("item_reinforced_iron_plate", 2.5)],
+        ItemComponent("item_crystal_oscillator", 1),
+    ),
+
+    recipe_explosive_rebar: ManufacturerRecipe(
+        "Explosive Rebar",
+        [ItemComponent("item_iron_rebar", 10), ItemComponent("item_smokeless_powder", 10), ItemComponent("item_steel_pipe", 10)],
+        ItemComponent("item_explosive_rebar", 5),
+    ),
+
+    recipe_flexible_framework: ManufacturerRecipe(
+        "Flexible Framework",
+        [ItemComponent("item_modular_frame", 3.75), ItemComponent("item_steel_beam", 22.5), ItemComponent("item_rubber", 30)],
+        ItemComponent("item_versatile_framework", 7.5),
+        true,
+    ),
+
+    recipe_gas_filter: ManufacturerRecipe(
+        "Gas Filter",
+        [ItemComponent("item_coal", 37.5), ItemComponent("item_rubber", 15), ItemComponent("item_fabric", 15)],
+        ItemComponent("item_gas_filter", 7.5),
+    ),
+
+    recipe_heavy_encased_frame: ManufacturerRecipe(
+        "Heavy Encased Frame",
+        [ItemComponent("item_modular_frame", 7.5), ItemComponent("item_encased_industrial_beam", 9.375), ItemComponent("item_steel_pipe", 33.75), ItemComponent("item_concrete", 20.625)],
+        ItemComponent("item_heavy_modular_frame", 2.8),
+        true,
+    ),
+
+    recipe_heavy_flexible_frame: ManufacturerRecipe(
+        "Heavy Flexible Frame",
+        [ItemComponent("item_modular_frame", 18.75), ItemComponent("item_encased_industrial_beam", 11.25), ItemComponent("item_rubber", 75), ItemComponent("item_screw", 200)],
+        ItemComponent("item_heavy_modular_frame", 3.5),
+        true,
+    ),
+
+    recipe_heavy_modular_frame: ManufacturerRecipe(
+        "Heavy Modular Frame",
+        [ItemComponent("item_modular_frame", 10), ItemComponent("item_steel_pipe", 30), ItemComponent("item_encased_industrial_beam", 10), ItemComponent("item_screw", 200)],
+        ItemComponent("item_heavy_modular_frame", 2),
+    ),
+
+    recipe_high_speed_connector: ManufacturerRecipe(
+        "High-Speed Connector",
+        [ItemComponent("item_quickwire", 210), ItemComponent("item_cable", 37.5), ItemComponent("item_circuit_board", 3.75)],
+        ItemComponent("item_high_speed_connector", 3.8),
+    ),
+
+    recipe_infused_uranium_cell: ManufacturerRecipe(
+        "Infused Uranium Cell",
+        [ItemComponent("item_uranium", 25), ItemComponent("item_silica", 15), ItemComponent("item_sulfur", 25), ItemComponent("item_quickwire", 75)],
+        ItemComponent("item_encased_uranium_cell", 20),
+        true,
+    ),
+
+    recipe_insulated_crystal_oscillator: ManufacturerRecipe(
+        "Insulated Crystal Oscillator",
+        [ItemComponent("item_quartz_crystal", 18.75), ItemComponent("item_rubber", 13.125), ItemComponent("item_ai_limiter", 1.875)],
+        ItemComponent("item_crystal_oscillator", 1.9),
+        true,
+    ),
+
+    recipe_iodine_infused_filter: ManufacturerRecipe(
+        "Iodine Infused Filter",
+        [ItemComponent("item_gas_filter", 3.75), ItemComponent("item_quickwire", 30), ItemComponent("item_aluminum_casing", 3.75)],
+        ItemComponent("item_iodine_infused_filter", 1.9),
+    ),
+
+    recipe_magnetic_field_generator: ManufacturerRecipe(
+        "Magnetic Field Generator",
+        [ItemComponent("item_versatile_framework", 2.5), ItemComponent("item_electromagnetic_control_rod", 1), ItemComponent("item_battery", 5)],
+        ItemComponent("item_magnetic_field_generator", 1),
+    ),
+
+    recipe_modular_engine: ManufacturerRecipe(
+        "Modular Engine",
+        [ItemComponent("item_motor", 2), ItemComponent("item_rubber", 15), ItemComponent("item_smart_plating", 2)],
+        ItemComponent("item_modular_engine", 1),
+    ),
+
+    recipe_nuke_nobelisk: ManufacturerRecipe(
+        "Nuke Nobelisk",
+        [ItemComponent("item_nobelisk", 2.5), ItemComponent("item_encased_uranium_cell", 10), ItemComponent("item_smokeless_powder", 5), ItemComponent("item_ai_limiter", 3)],
+        ItemComponent("item_nuke_nobelisk", 0.5),
+    ),
+
+    recipe_plastic_smart_plating: ManufacturerRecipe(
+        "Plastic Smart Plating",
+        [ItemComponent("item_reinforced_iron_plate", 2.5), ItemComponent("item_rotor", 2.5), ItemComponent("item_plastic", 7.5)],
+        ItemComponent("item_smart_plating", 5),
+        true,
+    ),
+
+    recipe_plutonium_fuel_rod: ManufacturerRecipe(
+        "Plutonium Fuel Rod",
+        [ItemComponent("item_encased_plutonium_cell", 7.5), ItemComponent("item_steel_beam", 4.5), ItemComponent("item_electromagnetic_control_rod", 1.5), ItemComponent("item_heat_sink", 2.5)],
+        ItemComponent("item_plutonium_fuel_rod", 0.3),
+    ),
+
+    recipe_radio_connection_unit: ManufacturerRecipe(
+        "Radio Connection Unit",
+        [ItemComponent("item_heat_sink", 15), ItemComponent("item_high_speed_connector", 7.5), ItemComponent("item_quartz_crystal", 45)],
+        ItemComponent("item_radio_control_unit", 3.8),
+        true,
+    ),
+
+    recipe_radio_control_system: ManufacturerRecipe(
+        "Radio Control System",
+        [ItemComponent("item_crystal_oscillator", 1.5), ItemComponent("item_circuit_board", 15), ItemComponent("item_aluminum_casing", 90), ItemComponent("item_rubber", 45)],
+        ItemComponent("item_radio_control_unit", 4.5),
+        true,
+    ),
+
+    recipe_radio_control_unit: ManufacturerRecipe(
+        "Radio Control Unit",
+        [ItemComponent("item_aluminum_casing", 40), ItemComponent("item_crystal_oscillator", 1.25), ItemComponent("item_computer", 1.25)],
+        ItemComponent("item_radio_control_unit", 2.5),
+    ),
+
+    recipe_rigour_motor: ManufacturerRecipe(
+        "Rigour Motor",
+        [ItemComponent("item_rotor", 3.75), ItemComponent("item_stator", 3.75), ItemComponent("item_crystal_oscillator", 1.25)],
+        ItemComponent("item_motor", 7.5),
+        true,
+    ),
+
+    recipe_silicon_high_speed_connector: ManufacturerRecipe(
+        "Silicon High-Speed Connector",
+        [ItemComponent("item_quickwire", 90), ItemComponent("item_silica", 37.5), ItemComponent("item_circuit_board", 3)],
+        ItemComponent("item_high_speed_connector", 3),
+        true,
+    ),
+
+    recipe_super_state_computer: ManufacturerRecipe(
+        "Super-State Computer",
+        [ItemComponent("item_computer", 3.6), ItemComponent("item_electromagnetic_control_rod", 2.4), ItemComponent("item_battery", 24), ItemComponent("item_wire", 54)],
+        ItemComponent("item_supercomputer", 2.4),
+        true,
+    ),
+
+    recipe_supercomputer: ManufacturerRecipe(
+        "Supercomputer",
+        [ItemComponent("item_computer", 3.75), ItemComponent("item_ai_limiter", 3.75), ItemComponent("item_high_speed_connector", 5.625), ItemComponent("item_plastic", 52.5)],
+        ItemComponent("item_supercomputer", 1.9),
+    ),
+
+    recipe_thermal_propulsion_rocket: ManufacturerRecipe(
+        "Thermal Propulsion Rocket",
+        [ItemComponent("item_modular_frame", 2.5), ItemComponent("item_turbo_motor", 1), ItemComponent("item_cooling_system", 3), ItemComponent("item_fused_modular_frame", 1)],
+        ItemComponent("item_thermal_propulsion_rocket", 1),
+    ),
+
+    recipe_turbo_electric_motor: ManufacturerRecipe(
+        "Turbo Electric Motor",
+        [ItemComponent("item_motor", 6.5625), ItemComponent("item_radio_control_unit", 8.4375), ItemComponent("item_electromagnetic_control_rod", 4.6875), ItemComponent("item_rotor", 6.5625)],
+        ItemComponent("item_turbo_motor", 2.8),
+        true,
+    ),
+
+    recipe_turbo_motor: ManufacturerRecipe(
+        "Turbo Motor",
+        [ItemComponent("item_cooling_system", 7.5), ItemComponent("item_radio_control_unit", 3.75), ItemComponent("item_motor", 7.5), ItemComponent("item_rubber", 45)],
+        ItemComponent("item_turbo_motor", 1.9),
+    ),
+
+    recipe_turbo_pressure_motor: ManufacturerRecipe(
+        "Turbo Pressure Motor",
+        [ItemComponent("item_motor", 7.5), ItemComponent("item_pressure_conversion_cube", 1.875), ItemComponent("item_packaged_nitrogen_gas", 45), ItemComponent("item_stator", 15)],
+        ItemComponent("item_turbo_motor", 3.8),
+        true,
+    ),
+
+    recipe_turbo_rifle_ammo: ManufacturerRecipe(
+        "Turbo Rifle Ammo",
+        [ItemComponent("item_rifle_ammo", 125), ItemComponent("item_aluminum_casing", 15), ItemComponent("item_packaged_turbofuel", 15)],
+        ItemComponent("item_turbo_rifle_ammo", 250),
+    ),
+
+    recipe_uranium_fuel_rod: ManufacturerRecipe(
+        "Uranium Fuel Rod",
+        [ItemComponent("item_encased_uranium_cell", 20), ItemComponent("item_encased_industrial_beam", 1.2), ItemComponent("item_electromagnetic_control_rod", 2)],
+        ItemComponent("item_uranium_fuel_rod", 0.4),
+    ),
+
+    recipe_uranium_fuel_unit: ManufacturerRecipe(
+        "Uranium Fuel Unit",
+        [ItemComponent("item_encased_uranium_cell", 20), ItemComponent("item_electromagnetic_control_rod", 2), ItemComponent("item_crystal_oscillator", 0.6), ItemComponent("item_beacon", 1.2)],
+        ItemComponent("item_uranium_fuel_rod", 0.6),
     ),
 };
 
