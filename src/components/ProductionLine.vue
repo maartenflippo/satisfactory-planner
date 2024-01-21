@@ -62,7 +62,15 @@ function format_power(value: number): string {
 
             <Fieldset legend="Items">
                 <DataTable :value="items_overview">
-                    <Column field="item_name" header="Item" />
+                    <Column header="Item">
+                        <template #body="slotProps">
+                            <div class="flex align-items-center gap-3">
+                                <img :src="slotProps.data.item.image_url" :alt="`${slotProps.data.item_name} icon`"
+                                    width="48" height="48" />
+                                <span>{{ slotProps.data.item_name }}</span>
+                            </div>
+                        </template>
+                    </Column>
                     <Column field="gross_production" header="Production" />
                     <Column field="consumption" header="Consumption" />
                     <Column field="net_production" header="Net Production" />

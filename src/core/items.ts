@@ -118,7 +118,9 @@ export type Item = {
 };
 
 function item(name: string, image_name: string = "", topographic_order: number = 0): Item {
-    const image_url = image_name === "" ? name.replace(" ", "-").toLowerCase() : `/images/items/${image_name}_64.png`;
+    const file_name = image_name === "" ? name.replace(" ", "-").toLowerCase() : image_name;
+
+    const image_url = `/satisfactory-planner/images/items/${file_name}_64.png`;
 
     return {
         name,
