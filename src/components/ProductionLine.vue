@@ -60,20 +60,21 @@ function format_power(value: number): string {
         <div class="w-5 px-3">
             <h3>Overview</h3>
 
-            <Fieldset legend="Items">
+            <!-- <Fieldset legend="Items"
+                :pt="{ toggleableContent: { style: 'margin: 0 calc(-1 * var(--content-padding) / 2 - 2px)' }, content: { class: 'p-0' } }"> -->
+            <Fieldset legend="Items"
+                :pt="{ root: { class: 'p-0' }, legend: { class: 'ml-3' }, content: { class: 'p-0 pt-3' } }">
                 <DataTable :value="items_overview">
-                    <Column header="Item">
+                    <Column header="Item" body-class="flex align-items-center gap-3">
                         <template #body="slotProps">
-                            <div class="flex align-items-center gap-3">
-                                <img :src="slotProps.data.item.image_url" :alt="`${slotProps.data.item_name} icon`"
-                                    width="48" height="48" />
-                                <span>{{ slotProps.data.item_name }}</span>
-                            </div>
+                            <img :src="slotProps.data.item.image_url" :alt="`${slotProps.data.item_name} icon`" width="48"
+                                height="48" />
+                            <span>{{ slotProps.data.item_name }}</span>
                         </template>
                     </Column>
-                    <Column field="gross_production" header="Production" />
-                    <Column field="consumption" header="Consumption" />
-                    <Column field="net_production" header="Net Production" />
+                    <Column field="gross_production" header="Production" data-type="numeric" body-class="text-center" />
+                    <Column field="consumption" header="Consumption" data-type="numeric" body-class="text-center" />
+                    <Column field="net_production" header="Net Production" body-class="text-center" />
 
                     <template #empty>
                         <p class="text-center">Add a recipe to start with a production line.</p>
