@@ -10,11 +10,11 @@ beyond the field currently being edited.
 ## Features
 
 - [ ] All Recipes
-  - [*] Smelter Recipes
+  - [x] Smelter Recipes
   - [ ] Foundry Recipes
-  - [*] Constructor Recipes
-  - [*] Assembler Recipes
-  - [ ] Manufacterer Recipes
+  - [x] Constructor Recipes
+  - [x] Assembler Recipes
+  - [x] Manufacterer Recipes
   - [ ] Blender Recipes
   - [ ] Packager Recipes
   - [ ] Generators
